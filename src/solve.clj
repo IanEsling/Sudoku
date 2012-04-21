@@ -12,7 +12,7 @@
   (count-cells-for #(< 1 (count %)) row)
   )
 
-(defn solved [row]
+(defn solved? [row]
   (if (< 0 (count-unsolved-cells row))
     false
     true)
@@ -22,9 +22,21 @@
   (partition 9 board)
   )
 
+(defn only-solved-cells [row]
+  (remove #(< 1 (count %)) row)
+  )
+
+(defn solve-only-possible [row]
+  (apply disj (set (range 1 10))
+    (for [cell (only-solved-cells row)]
+      (first cell))
+    )
+  )
+
 (defn solve-only-possible-in-row [board]
-  (for [row (get-rows board) :while (not (solved row))]
-    (if (= 1 (count (unsolved-cells row))))
-    (solve row)
+  (for [row (get-rows board)]
+    (if (not (solved? row))
+      (solve-only-possible row)
+      )
     )
   )
