@@ -1,3 +1,5 @@
+(ns sudoku-clj.solve)
+
 (defn count-cells-for [f row]
   (reduce #(+ %1 (if (f %2) 1 0)) 0 row)
   )
