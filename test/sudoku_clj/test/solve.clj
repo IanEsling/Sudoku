@@ -13,12 +13,10 @@
   (count (get-rows (random-board))) => 9)
 
 (fact "each row contains 9 cells"
-  (loop [rows (get-rows (random-board))]
-    (if (seq? rows)
-      (count (first rows)) => 9
-      (recur (next rows))
-      )
+  (doseq [rows (get-rows (random-board))]
+    (count rows) => 9
     )
   )
+
 
 
