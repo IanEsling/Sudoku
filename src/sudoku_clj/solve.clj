@@ -9,7 +9,7 @@
   )
 
 (defn count-unsolved-cells [row]
-  (count-cells-for #(< 1 (count %)) row)
+  (count-cells-for #(< 1 (count %)) (for [cell row] (:numbers cell)))
   )
 
 (defn solved? [row]
@@ -18,12 +18,16 @@
     true)
   )
 
+(defn get-row-number [x board]
+  (filter #(= x (:row %)) board)
+  )
+
 (defn get-rows [board]
   (partition 9 board)
   )
 
 (defn only-solved-cells [row]
-  (remove #(< 1 (count %)) row)
+  (remove #(< 1 (count %)) (for [cell row] (:numbers cell)))
   )
 
 (defn solve-only-possible [row]
