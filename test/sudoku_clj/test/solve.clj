@@ -23,11 +23,27 @@
   )
 
 (fact "a row with one unsolved cell left can be solved"
-;check there's no cells in row 1 with more than one possible number after we've solved it
+  ;check there's no cells in row 1 with more than one possible number after we've solved it
   (count (filter #(< 1 (count (:numbers %)))
            (filter #(= 1 (:row %))
              (solve-only-possible-in-row (create-board [1 2 3 4 5 6 7 8 0]))
              )
            )
     ) => 0
+  ;check board is different
+  (def board (create-board [1 2 3 4 5 6 7 8 0]))
+  (= board (solve-only-possible-in-row board)) => false
+  ;check board the same if nothing solvable
+  (def board (create-board [1 2 3 4 5 6 7 8 9]))
+  (= board (solve-only-possible-in-row board)) => true
+  )
+
+(fact "a row will only be solved if only one cell is left unsolved"
+  ;check there's still 2 cells in row 1 with more than one possible number after we've solved it
+  (count (filter #(< 1 (count (:numbers %)))
+           (filter #(= 1 (:row %))
+             (solve-only-possible-in-row (create-board [1 2 3 4 5 6 7 0 0]))
+             )
+           )
+    ) => 2
   )
