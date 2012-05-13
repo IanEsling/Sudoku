@@ -18,29 +18,40 @@
     true)
   )
 
-(defn get-row-number [x board]
-  (filter #(= x (:row %)) board)
-  )
-
 (defn get-rows [board]
   (partition 9 board)
+  )
+
+(defn unsolved-rows [board]
+  (filter #(not (solved? %)) (get-rows board))
+  )
+
+(defn get-row-number [x board]
+  (filter #(= x (:row %)) board)
   )
 
 (defn only-solved-cells [row]
   (remove #(< 1 (count %)) (for [cell row] (:numbers cell)))
   )
 
-(defn solve-only-possible [row]
-  (apply disj (set (range 1 10))
-    (for [cell (only-solved-cells row)]
-      (first cell))
+(defn get-only-possible-number [row]
+  (apply disj (set (map vector (range 1 10)))
+    (only-solved-cells row)
     )
   )
 
+(defn solve-only-possible [row]
+  (assoc (first (filter (comp (partial < 1) count :numbers) row))
+    :numbers (first (get-only-possible-number row)))
+  )
+
+(defn only-possible-solved [row board]
+  (def cell (solve-only-possible row))
+  (conj (remove #(and (= (:row cell) (:row %)) (= (:column cell) (:column %))) board) cell)
+  )
+
 (defn solve-only-possible-in-row [board]
-  (for [row (get-rows board)]
-    (if (not (solved? row))
-      (solve-only-possible row)
-      )
-    )
+  (if (< 0 (count (unsolved-rows board)))
+    (only-possible-solved (first (unsolved-rows board)) board)
+    board)
   )
