@@ -69,22 +69,14 @@
   (def solved-numbers (apply union (numbers-of-solved-cells row)))
   (loop [cells (unsolved-cells row)
          newboard board]
-;  (println cells)
-;  (println newboard)
     (def cell (first cells))
     (if (not (nil? cell))
       (recur (next cells) (conj (remove #(and (= (:row cell) (:row %)) (= (:column cell) (:column %))) newboard)
                             (assoc cell
-                            :numbers (difference (:numbers (first cells)) solved-numbers))
+                            :numbers (difference (:numbers cell) solved-numbers))
         )
       )
       newboard
       )
-;
-;    (println)
-;    (println solved-numbers)
-;    (println cells)
-;    (println board)
     )
-
   )
