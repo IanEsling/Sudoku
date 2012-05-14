@@ -50,8 +50,12 @@
   (conj (remove #(and (= (:row cell) (:row %)) (= (:column cell) (:column %))) board) cell)
   )
 
+(defn rows-with-single-unsolved-cell [board]
+  (filter #(= 1 (count-unsolved-cells %)) (get-rows board))
+  )
+
 (defn solve-only-possible-in-row [board]
   (if (< 0 (count (unsolved-rows board)))
-    (only-possible-solved (first (unsolved-rows board)) board)
+    (only-possible-solved (first (rows-with-single-unsolved-cell board)) board)
     board)
   )

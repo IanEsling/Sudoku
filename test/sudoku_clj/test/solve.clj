@@ -40,7 +40,7 @@
 
 (fact "a row will only be solved if only one cell is left unsolved"
   ;check there's still 2 cells in row 1 with more than one possible number after we've solved it
-  (count (filter #(< 1 (count (:numbers %)))
+  (count (filter #(= 9 (count (:numbers %)))
            (filter #(= 1 (:row %))
              (solve-only-possible-in-row (create-board [1 2 3 4 5 6 7 0 0]))
              )
