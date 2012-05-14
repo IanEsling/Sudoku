@@ -1,4 +1,5 @@
-(ns sudoku-clj.solve)
+(ns sudoku-clj.solve
+  (:use clojure.set))
 
 (defn count-cells-for [f row]
   (reduce #(+ %1 (if (f %2) 1 0)) 0 row)
@@ -30,19 +31,23 @@
   (filter #(= x (:row %)) board)
   )
 
-(defn only-solved-cells [row]
+(defn numbers-of-solved-cells [row]
   (remove #(< 1 (count %)) (for [cell row] (:numbers cell)))
   )
 
 (defn get-only-possible-number [row]
-  (apply disj (set (map vector (range 1 10)))
-    (only-solved-cells row)
+  (apply disj (set (range 1 10))
+    (apply union (numbers-of-solved-cells row))
     )
   )
 
+(defn unsolved-cells [row]
+  (filter (comp (partial < 1) count :numbers ) row)
+  )
+
 (defn solve-only-possible [row]
-  (assoc (first (filter (comp (partial < 1) count :numbers) row))
-    :numbers (first (get-only-possible-number row)))
+  (assoc (first (unsolved-cells row))
+    :numbers (get-only-possible-number row))
   )
 
 (defn only-possible-solved [row board]
@@ -60,6 +65,26 @@
     board)
   )
 
-(defn remove-solved-numbers-from-row [board]
-  (for [row (get-rows board)])
+(defn remove-solved-numbers-from-row [row board]
+  (def solved-numbers (apply union (numbers-of-solved-cells row)))
+  (loop [cells (unsolved-cells row)
+         newboard board]
+;  (println cells)
+;  (println newboard)
+    (def cell (first cells))
+    (if (not (nil? cell))
+      (recur (next cells) (conj (remove #(and (= (:row cell) (:row %)) (= (:column cell) (:column %))) newboard)
+                            (assoc cell
+                            :numbers (difference (:numbers (first cells)) solved-numbers))
+        )
+      )
+      newboard
+      )
+;
+;    (println)
+;    (println solved-numbers)
+;    (println cells)
+;    (println board)
+    )
+
   )

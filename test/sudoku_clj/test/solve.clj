@@ -30,6 +30,10 @@
              )
            )
     ) => 0
+  ;check all numbers are still in sets
+  (for [cell (filter #(= 1 (:row %)) (solve-only-possible-in-row (create-board [1 2 3 4 5 6 7 8 0])))]
+    (set? (:numbers cell))
+    ) => (repeat 9 true)
   ;check board is different
   (def board (create-board [1 2 3 4 5 6 7 8 0]))
   (= board (solve-only-possible-in-row board)) => false
@@ -49,9 +53,10 @@
   )
 
 (fact "an unsolved cell will have the numbers in solved cells in the same row removed"
+  (def board (create-board [1 2 3 4 5 6 7 0 0]))
   (count (filter #(= 2 (count (:numbers %)))
            (filter #(= 1 (:row %))
-             (remove-solved-numbers-from-row (create-board [1 2 3 4 5 6 7 0 0]))
+             (remove-solved-numbers-from-row (get-row-number 1 board) board)
              )
            )
     ) => 2

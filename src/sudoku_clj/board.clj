@@ -2,8 +2,8 @@
 
 (defn create-cell [x]
   (if (re-matches (re-pattern "[1-9]") (str x))
-    [x]
-    #(range 1 10)
+    (hash-set x)
+    (set (range 1 10))
     ))
 
 (defn board-cells []
