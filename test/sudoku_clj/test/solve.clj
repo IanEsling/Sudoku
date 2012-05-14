@@ -47,3 +47,12 @@
            )
     ) => 2
   )
+
+(fact "an unsolved cell will have the numbers in solved cells in the same row removed"
+  (count (filter #(= 2 (count (:numbers %)))
+           (filter #(= 1 (:row %))
+             (remove-solved-numbers-from-row (create-board [1 2 3 4 5 6 7 0 0]))
+             )
+           )
+    ) => 2
+  )

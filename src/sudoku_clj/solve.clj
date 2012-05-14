@@ -59,3 +59,7 @@
     (only-possible-solved (first (rows-with-single-unsolved-cell board)) board)
     board)
   )
+
+(defn remove-solved-numbers-from-row [board]
+  (for [row (get-rows board)])
+  )
