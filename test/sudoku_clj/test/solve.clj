@@ -60,4 +60,7 @@
              )
            )
     ) => 2
+;should both be a set of 8 and 9
+  (:numbers (first (filter #(and (= 1 (:row %)) (= 8 (:column %))) (get-row-number 1 (remove-solved-numbers-from-row (get-row-number 1 board) board))))) => #{8 9}
+  (:numbers (first (filter #(and (= 1 (:row %)) (= 9 (:column %))) (get-row-number 1 (remove-solved-numbers-from-row (get-row-number 1 board) board))))) => #{8 9}
   )
