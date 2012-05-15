@@ -5,10 +5,6 @@
   (reduce #(+ %1 (if (f %2) 1 0)) 0 row)
   )
 
-(defn count-solved-cells [row]
-  (count-cells-for #(= 1 (count %)) row)
-  )
-
 (defn count-unsolved-cells [row]
   (count-cells-for #(< 1 (count %)) (for [cell row] (:numbers cell)))
   )
@@ -25,10 +21,6 @@
 
 (defn unsolved-rows [board]
   (filter #(not (solved? %)) (get-rows board))
-  )
-
-(defn get-row-number [x board]
-  (filter #(= x (:row %)) board)
   )
 
 (defn numbers-of-solved-cells [row]

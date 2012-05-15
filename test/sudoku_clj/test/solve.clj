@@ -8,6 +8,10 @@
   (create-board (repeatedly 81 (partial rand-int 10)))
   )
 
+(defn get-row-number [x board]
+  (filter #(= x (:row %)) board)
+  )
+
 (fact "a board can be converted into 9 rows"
   (count (get-rows (random-board))) => 9)
 
