@@ -77,11 +77,6 @@
   (loop [rows (get-rows board)
          newboard board]
     (def new-row (remove-solved-numbers-from-row (first rows)))
-    (println "removing from board...")
-    (println new-row)
-    (println (first rows))
-    (println "unsolved in old row: " + (count-unsolved-cells (first rows)))
-    (println "unsolved in new row: " + (count-unsolved-cells new-row))
     (if (and (not (nil? new-row)) (= (count-unsolved-cells (first rows)) (count-unsolved-cells new-row)))
       (recur (next rows) (conj (remove #(= (first (keys (group-by :row new-row))) (:row %)) newboard)
                            new-row))

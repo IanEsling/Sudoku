@@ -76,8 +76,6 @@
 (fact "only the first solvable cell will be solved"
   (def board (create-board [1 2 3 4 5 6 7 8 0 1 2 3 4 5 6 7 8 0]))
   (def solved-board (remove-solved-numbers-from-board board))
-(println "solved board:")
-(println solved-board)
   (count (get-row-number 1 solved-board)) => 9
   (count (filter #(< 1 (count (:numbers %)))
            (filter #(= 1 (:row %))
