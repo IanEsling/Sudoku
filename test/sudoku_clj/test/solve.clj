@@ -13,7 +13,7 @@
   )
 
 (defn get-cell [x y cells]
-  (filter #(and (= x (:row %)) (= y (:column %))) cells)
+  (first (filter #(and (= x (:row %)) (= y (:column %))) cells))
   )
 
 (fact "a board can be converted into 9 rows"
@@ -69,22 +69,19 @@
            )
     ) => 2
   ;should both be a set of 8 and 9
-  (:numbers (first (filter #(and (= 1 (:row %)) (= 8 (:column %))) (get-row-number 1 (remove-solved-numbers-from-row (get-row-number 1 board)))))) => #{8 9}
-  (:numbers (first (filter #(and (= 1 (:row %)) (= 9 (:column %))) (get-row-number 1 (remove-solved-numbers-from-row (get-row-number 1 board)))))) => #{8 9}
+  (:numbers (get-cell 1 8 (remove-solved-numbers-from-row (get-row-number 1 board)))) => #{8 9}
+  (:numbers (get-cell 1 9 (remove-solved-numbers-from-row (get-row-number 1 board)))) => #{8 9}
   )
 
 (fact "only the first solvable cell will be solved"
-  (def board (create-board [1 2 3 4 5 6 7 8 0 1 2 3 4 5 6 7 8 0]))
+  (def board (create-board [1 2 3 4 5 6 7 8 9
+                            1 2 3 4 5 6 7 8 0
+                            1 2 3 4 5 6 7 8 0]))
   (def solved-board (remove-solved-numbers-from-board board))
   (count (get-row-number 1 solved-board)) => 9
-  (count (filter #(< 1 (count (:numbers %)))
-           (filter #(= 1 (:row %))
-             solved-board)
-           )
-    ) => 0
-  (count (filter #(< 1 (count (:numbers %)))
-           (filter #(= 2 (:row %))
-             solved-board)
-           )
-    ) => 1
+  (count (get-row-number 2 solved-board)) => 9
+  (count (get-row-number 3 solved-board)) => 9
+  (count-unsolved-cells (get-row-number 1 solved-board)) => 0
+  (count-unsolved-cells (get-row-number 2 solved-board)) => 0
+  (count-unsolved-cells (get-row-number 3 solved-board)) => 1
   )

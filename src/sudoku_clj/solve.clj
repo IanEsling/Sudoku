@@ -78,7 +78,7 @@
          newboard board]
     (def new-row (remove-solved-numbers-from-row (first rows)))
     (if (and (not (nil? new-row)) (= (count-unsolved-cells (first rows)) (count-unsolved-cells new-row)))
-      (recur (next rows) (conj (remove #(= (first (keys (group-by :row new-row))) (:row %)) newboard)
+      (recur (next rows) (apply conj (remove #(= (first (keys (group-by :row new-row))) (:row %)) newboard)
                            new-row))
       (apply conj (remove #(= (first (keys (group-by :row new-row))) (:row %)) newboard)
         new-row))))
