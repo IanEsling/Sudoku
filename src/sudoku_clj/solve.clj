@@ -16,7 +16,8 @@
   )
 
 (defn get-rows [board]
-  (partition 9 board)
+  ;  (doall (partition 9 board))
+  (for [row (group-by :row board)] (val row))
   )
 
 (defn unsolved-rows [board]
@@ -34,7 +35,7 @@
   )
 
 (defn unsolved-cells [row]
-  (filter (comp (partial < 1) count :numbers ) row)
+  (filter #(< 1 (count (:numbers %))) row)
   )
 
 (defn solve-only-possible [row]
@@ -57,18 +58,32 @@
     board)
   )
 
-(defn remove-solved-numbers-from-row [row board]
+(defn remove-solved-numbers-from-row [row]
   (def solved-numbers (apply union (numbers-of-solved-cells row)))
   (loop [cells (unsolved-cells row)
-         newboard board]
+         new-row row]
     (def cell (first cells))
     (if (not (nil? cell))
-      (recur (next cells) (conj (remove #(and (= (:row cell) (:row %)) (= (:column cell) (:column %))) newboard)
-                            (assoc cell
-                            :numbers (difference (:numbers cell) solved-numbers))
+      (recur (next cells) (conj (remove #(and (= (:row cell) (:row %)) (= (:column cell) (:column %))) new-row)
+                            (assoc cell :numbers (difference (:numbers cell) solved-numbers)
+                              )
+                            )
         )
-      )
-      newboard
-      )
+      new-row)
     )
   )
+
+(defn remove-solved-numbers-from-board [board]
+  (loop [rows (get-rows board)
+         newboard board]
+    (def new-row (remove-solved-numbers-from-row (first rows)))
+    (println "removing from board...")
+    (println new-row)
+    (println (first rows))
+    (println "unsolved in old row: " + (count-unsolved-cells (first rows)))
+    (println "unsolved in new row: " + (count-unsolved-cells new-row))
+    (if (and (not (nil? new-row)) (= (count-unsolved-cells (first rows)) (count-unsolved-cells new-row)))
+      (recur (next rows) (conj (remove #(= (first (keys (group-by :row new-row))) (:row %)) newboard)
+                           new-row))
+      (apply conj (remove #(= (first (keys (group-by :row new-row))) (:row %)) newboard)
+        new-row))))

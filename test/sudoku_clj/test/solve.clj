@@ -12,6 +12,10 @@
   (filter #(= x (:row %)) board)
   )
 
+(defn get-cell [x y cells]
+  (filter #(and (= x (:row %)) (= y (:column %))) cells)
+  )
+
 (fact "a board can be converted into 9 rows"
   (count (get-rows (random-board))) => 9)
 
@@ -60,11 +64,29 @@
   (def board (create-board [1 2 3 4 5 6 7 0 0]))
   (count (filter #(= 2 (count (:numbers %)))
            (filter #(= 1 (:row %))
-             (remove-solved-numbers-from-row (get-row-number 1 board) board)
+             (remove-solved-numbers-from-row (get-row-number 1 board))
              )
            )
     ) => 2
-;should both be a set of 8 and 9
-  (:numbers (first (filter #(and (= 1 (:row %)) (= 8 (:column %))) (get-row-number 1 (remove-solved-numbers-from-row (get-row-number 1 board) board))))) => #{8 9}
-  (:numbers (first (filter #(and (= 1 (:row %)) (= 9 (:column %))) (get-row-number 1 (remove-solved-numbers-from-row (get-row-number 1 board) board))))) => #{8 9}
+  ;should both be a set of 8 and 9
+  (:numbers (first (filter #(and (= 1 (:row %)) (= 8 (:column %))) (get-row-number 1 (remove-solved-numbers-from-row (get-row-number 1 board)))))) => #{8 9}
+  (:numbers (first (filter #(and (= 1 (:row %)) (= 9 (:column %))) (get-row-number 1 (remove-solved-numbers-from-row (get-row-number 1 board)))))) => #{8 9}
+  )
+
+(fact "only the first solvable cell will be solved"
+  (def board (create-board [1 2 3 4 5 6 7 8 0 1 2 3 4 5 6 7 8 0]))
+  (def solved-board (remove-solved-numbers-from-board board))
+(println "solved board:")
+(println solved-board)
+  (count (get-row-number 1 solved-board)) => 9
+  (count (filter #(< 1 (count (:numbers %)))
+           (filter #(= 1 (:row %))
+             solved-board)
+           )
+    ) => 0
+  (count (filter #(< 1 (count (:numbers %)))
+           (filter #(= 2 (:row %))
+             solved-board)
+           )
+    ) => 1
   )
