@@ -16,6 +16,12 @@
   (first (filter #(and (= row (:row %)) (= column (:column %))) cells))
   )
 
+(defn solved? [row]
+  (if (< 0 (count-unsolved-cells row))
+    false
+    true)
+  )
+
 (fact "a board can be converted into 9 rows"
   (count (get-rows (random-board))) => 9)
 

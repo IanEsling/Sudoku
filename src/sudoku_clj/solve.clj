@@ -9,53 +9,16 @@
   (count-cells-for #(< 1 (count %)) (for [cell row] (:numbers cell)))
   )
 
-(defn solved? [row]
-  (if (< 0 (count-unsolved-cells row))
-    false
-    true)
-  )
-
 (defn get-rows [board]
-  ;  (doall (partition 9 board))
   (for [row (group-by :row board)] (val row))
-  )
-
-(defn unsolved-rows [board]
-  (filter #(not (solved? %)) (get-rows board))
   )
 
 (defn numbers-of-solved-cells [row]
   (remove #(< 1 (count %)) (for [cell row] (:numbers cell)))
   )
 
-(defn get-only-possible-number [row]
-  (apply disj (set (range 1 10))
-    (apply union (numbers-of-solved-cells row))
-    )
-  )
-
 (defn unsolved-cells [row]
   (filter #(< 1 (count (:numbers %))) row)
-  )
-
-(defn solve-only-possible [row]
-  (assoc (first (unsolved-cells row))
-    :numbers (get-only-possible-number row))
-  )
-
-(defn only-possible-solved [row board]
-  (def cell (solve-only-possible row))
-  (conj (remove #(and (= (:row cell) (:row %)) (= (:column cell) (:column %))) board) cell)
-  )
-
-(defn rows-with-single-unsolved-cell [board]
-  (filter #(= 1 (count-unsolved-cells %)) (get-rows board))
-  )
-
-(defn solve-only-possible-in-row [board]
-  (if (< 0 (count (unsolved-rows board)))
-    (only-possible-solved (first (rows-with-single-unsolved-cell board)) board)
-    board)
   )
 
 (defn remove-solved-numbers-from-row [row]
