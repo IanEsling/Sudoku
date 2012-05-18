@@ -13,12 +13,12 @@
   (for [row (group-by :row board)] (val row))
   )
 
-(defn numbers-of-solved-cells [row]
-  (remove #(< 1 (count %)) (for [cell row] (:numbers cell)))
+(defn numbers-of-solved-cells [cells]
+  (remove #(< 1 (count %)) (for [cell cells] (:numbers cell)))
   )
 
-(defn unsolved-cells [row]
-  (filter #(< 1 (count (:numbers %))) row)
+(defn unsolved-cells [cells]
+  (filter #(< 1 (count (:numbers %))) cells)
   )
 
 (defn remove-solved-numbers-from-row [row]
