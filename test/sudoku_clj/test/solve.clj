@@ -12,8 +12,8 @@
   (filter #(= x (:row %)) board)
   )
 
-(defn get-cell [x y cells]
-  (first (filter #(and (= x (:row %)) (= y (:column %))) cells))
+(defn get-cell [row column cells]
+  (first (filter #(and (= row (:row %)) (= column (:column %))) cells))
   )
 
 (fact "a board can be converted into 9 rows"
@@ -28,36 +28,25 @@
 (fact "a row is solved if all cells only have one possible number"
   (solved? (get-row-number 1 (create-board [1 2 3 4 5 6 7 8 9]))) => true
   (solved? (get-row-number 1 (create-board [1 2 3 4 5 6 7 8 0]))) => false
+  (solved? (get-row-number 1 (create-board [0 2 3 4 5 6 7 8 0]))) => false
+  (solved? (get-row-number 1 (create-board [0 2 3 4 5 6 7 8 9]))) => false
   )
 
-(fact "a row with one unsolved cell left can be solved"
-  ;check there's no cells in row 1 with more than one possible number after we've solved it
-  (count (filter #(< 1 (count (:numbers %)))
-           (filter #(= 1 (:row %))
-             (solve-only-possible-in-row (create-board [1 2 3 4 5 6 7 8 0]))
-             )
-           )
-    ) => 0
+(fact "cell numbers are always sets after solving"
   ;check all numbers are still in sets
-  (for [cell (filter #(= 1 (:row %)) (solve-only-possible-in-row (create-board [1 2 3 4 5 6 7 8 0])))]
+  (for [cell (filter #(= 1 (:row %)) (remove-solved-numbers-from-board (create-board [1 2 3 4 5 6 7 8 0])))]
     (set? (:numbers cell))
     ) => (repeat 9 true)
-  ;check board is different
-  (def board (create-board [1 2 3 4 5 6 7 8 0]))
-  (= board (solve-only-possible-in-row board)) => false
-  ;check board the same if nothing solvable
-  (def board (create-board [1 2 3 4 5 6 7 8 9]))
-  (= board (solve-only-possible-in-row board)) => true
   )
 
-(fact "a row will only be solved if only one cell is left unsolved"
-  ;check there's still 2 cells in row 1 with more than one possible number after we've solved it
-  (count (filter #(= 9 (count (:numbers %)))
-           (filter #(= 1 (:row %))
-             (solve-only-possible-in-row (create-board [1 2 3 4 5 6 7 0 0]))
-             )
-           )
-    ) => 2
+(fact "a solved board is not equal to the original board"
+  (def board (create-board [1 2 3 4 5 6 7 8 0]))
+(= board (remove-solved-numbers-from-board board)) => false
+  )
+
+(fact "if the solver makes no changes the new board is equal to the original board"
+  (def board (create-board [1 2 3 4 5 6 7 8 9]))
+  (remove-solved-numbers-from-board board) => (just board :in-any-order )
   )
 
 (fact "an unsolved cell will have the numbers in solved cells in the same row removed"
@@ -78,6 +67,7 @@
                             1 2 3 4 5 6 7 8 0
                             1 2 3 4 5 6 7 8 0]))
   (def solved-board (remove-solved-numbers-from-board board))
+  (count solved-board) => 81
   (count (get-row-number 1 solved-board)) => 9
   (count (get-row-number 2 solved-board)) => 9
   (count (get-row-number 3 solved-board)) => 9
