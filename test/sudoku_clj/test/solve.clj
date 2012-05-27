@@ -1,5 +1,6 @@
 (ns sudoku-clj.test.solve
   (:use sudoku-clj.solve)
+  (:use sudoku-clj.board)
   )
 
 (defn random-board []
