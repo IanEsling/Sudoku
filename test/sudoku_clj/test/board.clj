@@ -4,12 +4,11 @@
   )
 
 (fact "board converts a list of numbers to a map of row, column and numbers"
-  (create-board '(1 2 3 0 5)) => (contains [
-                                             {:row 1 :column 1 :numbers #{1}}
-                                             {:row 1 :column 2 :numbers #{2}}
-                                             {:row 1 :column 3 :numbers #{3}}
-                                             {:row 1 :column 4 :numbers #{1 2 3 4 5 6 7 8 9}}
-                                             {:row 1 :column 5 :numbers #{5}}
+  (create-board '(1 2 3 0 5)) => (contains [  {[1 1] #{1}}
+                                              {[1 2] #{2}}
+                                              {[1 3] #{3}}
+                                              {[1 4] #{1 2 3 4 5 6 7 8 9}}
+                                              {[1 5] #{5}}
                                              ])
   )
 

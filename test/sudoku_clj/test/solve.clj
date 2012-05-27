@@ -9,11 +9,11 @@
   )
 
 (defn get-row-number [x board]
-  (filter #(= x (:row %)) board)
+  (into {} (filter #(= x (first (key %))) board))
   )
 
 (defn get-cell [row column cells]
-  (first (filter #(and (= row (:row %)) (= column (:column %))) cells))
+  (into {} (filter #(and (= row (first (first %))) (= column (second (first %)))) cells))
   )
 
 (defn solved? [row]
@@ -40,8 +40,8 @@
 
 (fact "cell numbers are always sets after solving"
   ;check all numbers are still in sets
-  (for [cell (filter #(= 1 (:row %)) (remove-solved-numbers-from-board (create-board [1 2 3 4 5 6 7 8 0])))]
-    (set? (:numbers cell))
+  (for [cell (filter #(= 1 (first (key %))) (into {} (remove-solved-numbers-from-board (create-board [1 2 3 4 5 6 7 8 0]))))]
+    (set? (second cell))
     ) => (repeat 9 true)
   )
 
@@ -52,27 +52,25 @@
 
 (fact "if the solver makes no changes the new board is equal to the original board"
   (def board (create-board [1 2 3 4 5 6 7 8 9]))
-  (remove-solved-numbers-from-board board) => (just board :in-any-order )
+  (into {} (remove-solved-numbers-from-board board)) => (just board :in-any-order )
   )
 
 (fact "an unsolved cell will have the numbers in solved cells in the same row removed"
   (def board (create-board [1 2 3 4 5 6 7 0 0]))
-  (count (filter #(= 2 (count (:numbers %)))
-           (filter #(= 1 (:row %))
-             (remove-solved-numbers-from-row (get-row-number 1 board))
-             )
-           )
-    ) => 2
+  (count (filter #(= 2 (count (second %)))
+           (into {} (filter #(= 1 (first (key %)))
+             (into {} (remove-solved-numbers-from-row (get-row-number 1 board)))))
+    )) => 2
   ;should both be a set of 8 and 9
-  (:numbers (get-cell 1 8 (remove-solved-numbers-from-row (get-row-number 1 board)))) => #{8 9}
-  (:numbers (get-cell 1 9 (remove-solved-numbers-from-row (get-row-number 1 board)))) => #{8 9}
+  (get (get-cell 1 8 (remove-solved-numbers-from-row (get-row-number 1 board))) [1 8]) => #{8 9}
+  (get (get-cell 1 9 (remove-solved-numbers-from-row (get-row-number 1 board))) [1 9]) => #{8 9}
   )
 
 (fact "only the first solvable cell will be solved"
   (def board (create-board [1 2 3 4 5 6 7 8 9
                             1 2 3 4 5 6 7 8 0
                             1 2 3 4 5 6 7 8 0]))
-  (def solved-board (remove-solved-numbers-from-board board))
+  (def solved-board (into {} (remove-solved-numbers-from-board board)))
   (count solved-board) => 81
   (count (get-row-number 1 solved-board)) => 9
   (count (get-row-number 2 solved-board)) => 9

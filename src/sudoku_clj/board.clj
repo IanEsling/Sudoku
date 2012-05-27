@@ -3,28 +3,16 @@
 (defn create-cell [x]
   (if (re-matches (re-pattern "[1-9]") (str x))
     (hash-set x)
-    (set (range 1 10))
-    ))
+    (set (range 1 10))))
 
 (defn board-cells []
   (for [row (range 1 10)
         column (range 1 10)]
-    {:row row :column column}
-    )
-  )
+    [row column]))
 
 (defn create-board [numbers]
-  (loop [all-cells []
-         numbers (map create-cell numbers)
-         cells (board-cells)]
-    (if (not (nil? (:row (first cells))))
-      (recur (conj all-cells {:row (:row (first cells))
-                              :column (:column (first cells))
-                              :numbers (first numbers)})
-        (rest numbers)
-        (rest cells)
-        )
-      all-cells
-      )
-    )
-  )
+  (loop [cell-numbers (map create-cell numbers)
+         cells (board-cells)
+         board{}]
+    (if (seq cells)
+      (recur (next cell-numbers) (next cells) (conj board {(first cells) (first cell-numbers)})) board)))
