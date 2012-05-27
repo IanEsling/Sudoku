@@ -5,10 +5,6 @@
   (:use sudoku-clj.board)
   )
 
-(defn random-board []
-  (create-board (repeatedly 81 (partial rand-int 10)))
-  )
-
 (defn get-row-number [x board]
   (into {} (filter #(= x (first (key %))) board))
   )
