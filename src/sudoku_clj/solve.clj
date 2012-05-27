@@ -13,8 +13,8 @@
 (defn numbers-of-solved-cells [cells]
   (remove #(< 1 (count %)) (for [cell cells] (val cell))))
 
-(defn unsolved-cells [cells]
-  (filter #(< 1 (count (val %))) cells))
+;(defn unsolved-cells [cells]
+;  (filter #(< 1 (count (val %))) cells))
 
 (defn remove-solved-numbers-from-row [row]
   (def solved-numbers (apply union (numbers-of-solved-cells row)))
@@ -26,5 +26,22 @@
 
 
 (defn remove-solved-numbers-from-board [board]
-  (map #(remove-solved-numbers-from-row %) (doall (get-rows board)))
-        )
+(loop [rows (doall (get-rows board))
+      newboard {}
+      solved false]
+(if-not (seq (first rows))
+  newboard
+  (let [row (first rows)
+        solved-before (count (numbers-of-solved-cells row))
+        row-after-solving (remove-solved-numbers-from-row row)
+        solved-after (count (numbers-of-solved-cells row-after-solving))]
+;  (println "row: " + row)
+;  (println "number solved before: " + solved-before)
+;  (println "number solved after: " + solved-after)
+;  (println "row after solving: " + row-after-solving)
+;  (println "newboard: " + newboard)
+;  (println "solved: " + solved)
+;  (println "if test: " + (and solved (= solved-before solved-after)))
+    (if-not solved
+      (recur (next rows) (conj newboard row-after-solving) (< solved-before solved-after))
+      (recur (next rows) (conj newboard row) true))))))
