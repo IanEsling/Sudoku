@@ -1,6 +1,7 @@
 (ns sudoku-clj.test.solve-rows
   (:use midje.sweet)
   (:use sudoku-clj.solve)
+  (:use sudoku-clj.test.solve)
   (:use sudoku-clj.board)
   )
 
@@ -11,13 +12,6 @@
 (defn get-row-number [x board]
   (into {} (filter #(= x (first (key %))) board))
   )
-
-(defn get-cell [row column cells]
-  (into {} (filter #(and (= row (first (first %))) (= column (second (first %)))) cells))
-  )
-
-(defn solved? [row]
-  (not (< 0 (count-unsolved-cells row))))
 
 (fact "a board can be converted into 9 rows"
   (count (get-rows (random-board))) => 9)
