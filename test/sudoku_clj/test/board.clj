@@ -14,9 +14,9 @@
 
 (fact "any thing not a number from 1 to 9 is interpreted as an unsolved cell and is converted into
       a set of 1 - 9"
-  (map create-cell '(1 "a" 2)) => [#{1} #{1 2 3 4 5 6 7 8 9} #{2}]
-  (map create-cell '(1 0 2)) => [#{1} #{1 2 3 4 5 6 7 8 9} #{2}]
-  (map create-cell '(1 "." 2)) => [#{1} #{1 2 3 4 5 6 7 8 9} #{2}]
-  (map create-cell '(1 "&" 2)) => [#{1} #{1 2 3 4 5 6 7 8 9} #{2}]
-  (map create-cell '(1 [1 2 3] 2)) => [#{1} #{1 2 3 4 5 6 7 8 9} #{2}]
+  (map create-cell-numbers '(1 "a" 2)) => [#{1} #{1 2 3 4 5 6 7 8 9} #{2}]
+  (map create-cell-numbers '(1 0 2)) => [#{1} #{1 2 3 4 5 6 7 8 9} #{2}]
+  (map create-cell-numbers '(1 "." 2)) => [#{1} #{1 2 3 4 5 6 7 8 9} #{2}]
+  (map create-cell-numbers '(1 "&" 2)) => [#{1} #{1 2 3 4 5 6 7 8 9} #{2}]
+  (map create-cell-numbers '(1 [1 2 3] 2)) => [#{1} #{1 2 3 4 5 6 7 8 9} #{2}]
   )

@@ -17,10 +17,7 @@
   )
 
 (defn solved? [row]
-  (if (< 0 (count-unsolved-cells row))
-    false
-    true)
-  )
+  (not (< 0 (count-unsolved-cells row))))
 
 (fact "a board can be converted into 9 rows"
   (count (get-rows (random-board))) => 9)
@@ -78,4 +75,6 @@
   (count-unsolved-cells (get-row-number 1 solved-board)) => 0
   (count-unsolved-cells (get-row-number 2 solved-board)) => 0
   (count-unsolved-cells (get-row-number 3 solved-board)) => 1
+  (get (get-cell 3 9 solved-board) [3 9]) => #{1 2 3 4 5 6 7 8 9}
+  (get (get-cell 2 9 solved-board) [2 9]) => #{9}
   )
