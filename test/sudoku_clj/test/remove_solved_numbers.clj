@@ -152,17 +152,13 @@
                             4 0 0 0 0 0 0 0 0
                             3 0 0 0 0 0 0 0 0
                             0 0 0 0 0 0 0 0 0]))
-  (def solved-board (into {} (remove-solved-numbers-from-board-by-unit get-columns board)))
+  (def solved-board (into {} (remove-solved-numbers board)))
   (count solved-board) => 81
   (count (get-column-number 1 solved-board)) => 9
   (count (get-column-number 2 solved-board)) => 9
   (count (get-row-number 1 solved-board)) => 9
-  (count-unsolved-cells (get-column-number 1 solved-board)) => 0
-  (count-unsolved-cells (get-column-number 2 solved-board)) => 8
-  (count-unsolved-cells (get-row-number 1 solved-board)) => 1
-  (count-unsolved-cells (get-row-number 2 solved-board)) => 8
-  (get-cell-numbers 9 1 solved-board) => #{2}
-  (get-cell-numbers 1 9 solved-board) => #{1 2 3 4 5 6 7 8 9}
+  (count (get-row-number 2 solved-board)) => 9
+  (count-unsolved-cells solved-board) => 65;should only solve one, not bothered which
 
   (def solved-board (into {} (remove-solved-numbers-from-board-by-unit get-rows board)))
   (count solved-board) => 81

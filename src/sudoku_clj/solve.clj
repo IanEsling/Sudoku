@@ -29,6 +29,7 @@
 
 (defn remove-solved-numbers-from-board-by-unit
   ([f board]
+  (println "solving board: " + board)
     (loop [rows (f board)
            newboard {}
            solved false]
