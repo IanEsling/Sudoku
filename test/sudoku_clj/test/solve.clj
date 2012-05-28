@@ -16,10 +16,17 @@
 (fact "a board can be converted into 9 columns"
   (count (get-columns (random-board))) => 9)
 
+(fact "a board can be converted into 9 regions"
+  (count (get-regions (random-board))) => 9)
+
 (fact "each row contains 9 cells"
   (doseq [row (get-rows (random-board))]
     (count row) => 9))
 
 (fact "each column contains 9 cells"
   (doseq [column (get-columns (random-board))]
+    (count column) => 9))
+
+(fact "each region contains 9 cells"
+  (doseq [column (get-regions (random-board))]
     (count column) => 9))
