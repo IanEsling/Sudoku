@@ -27,17 +27,21 @@
               ))
     unit unit))
 
-(defn remove-solved-numbers-from-board
-  ([board] (remove-solved-numbers-from-board board get-rows))
-  ([board f]
-  (loop [rows (f board)
-         newboard {}
-         solved false]
-    (if-let [row (first rows)]
+(defn remove-solved-numbers-from-board-by-unit
+  ([f board]
+    (loop [rows (f board)
+           newboard {}
+           solved false]
+      (if-let [row (first rows)]
         (if-not solved
           (let [solved-before (count (numbers-of-solved-cells row))
                 row-after-solving (remove-solved-numbers-from-unit row)
                 solved-after (count (numbers-of-solved-cells row-after-solving))]
             (recur (next rows) (conj newboard row-after-solving) (< solved-before solved-after)))
           (recur (next rows) (conj newboard row) true))
-      newboard))))
+        newboard))))
+
+(defn remove-solved-numbers [board]
+  ((comp (partial remove-solved-numbers-from-board-by-unit get-columns)
+     (partial remove-solved-numbers-from-board-by-unit get-rows))
+    board))

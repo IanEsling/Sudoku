@@ -7,8 +7,8 @@
 (defn random-board []
   (create-board (repeatedly 81 (partial rand-int 10))))
 
-(defn get-cell [row column cells]
-  (into {} (filter #(and (= row (first (first %))) (= column (second (first %)))) cells)))
+(defn get-cell-numbers [row column cells]
+  (second (first (filter #(and (= row (first (first %))) (= column (second (first %)))) cells))))
 
 (fact "a board can be converted into 9 rows"
   (count (get-rows (random-board))) => 9)
