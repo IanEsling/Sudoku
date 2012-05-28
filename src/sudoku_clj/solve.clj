@@ -2,8 +2,8 @@
   (:use clojure.set))
 
 (defn count-unsolved-cells
-  [row]
-  (reduce #(+ %1 (if (< 1 (count (val %2))) 1 0)) 0 row))
+  [cells]
+  (reduce #(+ %1 (if (< 1 (count (val %2))) 1 0)) 0 cells))
 
 (defn get-rows
   [board]
@@ -40,6 +40,10 @@
   [cells]
   (remove #(< 1 (count %)) (for [cell cells] (val cell))))
 
+(defn numbers-of-unsolved-cells
+  [cells]
+  (remove #(= 1 (count %)) (for [cell cells] (val cell))))
+
 (defn remove-solved-numbers-from-unit
   [unit]
   (def solved-numbers (apply union (numbers-of-solved-cells unit)))
@@ -73,5 +77,14 @@
 
 (defn remove-solved-numbers
   [board]
-  ((comp (solver-function get-columns) (solver-function get-rows))
+  ((comp (solver-function get-regions) (solver-function get-columns) (solver-function get-rows))
     (assoc {:solved false} :board board)))
+
+(defn run-solvers
+  [board]
+  (loop [count-unsolved-before (reduce #(+ %1 (count %2)) 0 (numbers-of-unsolved-cells board))
+         board-to-solve board]
+    (def newboard (remove-solved-numbers board-to-solve))
+    (if-not (= count-unsolved-before (reduce #(+ %1 (count %2)) 0 (numbers-of-unsolved-cells newboard)))
+      (recur (reduce #(+ %1 (count %2)) 0 (numbers-of-unsolved-cells newboard)) newboard)
+    newboard)))

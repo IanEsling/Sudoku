@@ -11,11 +11,32 @@
 (defn get-column-number [x board]
   (into {} (filter #(= x (second (key %))) board)))
 
+(defn get-region-number [x board]
+  (nth (get-regions board) (- x 1)))
+
 (fact "a row is solved if all cells only have one possible number"
   (count-unsolved-cells (get-row-number 1 (create-board [1 2 3 4 5 6 7 8 9]))) => 0
   (count-unsolved-cells (get-row-number 1 (create-board [1 2 3 4 5 6 7 8 0]))) => 1
   (count-unsolved-cells (get-row-number 1 (create-board [0 2 3 4 5 6 7 8 0]))) => 2
   (count-unsolved-cells (get-row-number 1 (create-board [0 2 3 4 5 6 7 8 9]))) => 1
+  )
+
+(fact "a region is solved if all cells only have one possible number"
+  (count-unsolved-cells (get-region-number 1 (create-board [1 2 3 0 0 0 0 0 0
+                                                            4 5 6 0 0 0 0 0 0
+                                                            7 8 9 0 0 0 0 0 0]))) => 0
+  (count-unsolved-cells (get-region-number 1 (create-board [1 2 3 0 0 0 0 0 0
+                                                            4 0 6 0 0 0 0 0 0
+                                                            7 8 9 0 0 0 0 0 0]))) => 1
+  (count-unsolved-cells (get-region-number 1 (create-board [0 2 3 0 0 0 0 0 0
+                                                            4 5 6 0 0 0 0 0 0
+                                                            7 8 0 0 0 0 0 0 0]))) => 2
+  (count-unsolved-cells (get-region-number 2 (create-board [0 0 0 1 2 3 0 0 0
+                                                            0 0 0 4 5 6 0 0 0
+                                                            0 0 0 7 8 9 0 0 0]))) => 0
+  (count-unsolved-cells (get-region-number 3 (create-board [0 0 0 0 0 0 1 2 3
+                                                            0 0 0 0 0 0 4 5 6
+                                                            0 0 0 0 0 0 7 8 9]))) => 0
   )
 
 (fact "a column is solved if all cells only have one possible number"
@@ -84,6 +105,17 @@
   (get-cell-numbers 1 9 (remove-solved-numbers-from-unit (get-row-number 1 board))) => #{8 9}
   )
 
+(fact "an unsolved region will have the numbers in solved cells in the same region removed"
+  (def board (create-board [1 2 3 0 0 0 0 0 0
+                            4 5 6 0 0 0 0 0 0
+                            7 0 0 0 0 0 0 0 0]))
+  (count (filter #(= 2 (count (second %)))
+           (remove-solved-numbers-from-unit (get-region-number 1 board)))) => 2
+  ;should both be a set of 8 and 9
+  (get-cell-numbers 3 2 (remove-solved-numbers-from-unit (get-region-number 1 board))) => #{8 9}
+  (get-cell-numbers 3 3 (remove-solved-numbers-from-unit (get-region-number 1 board))) => #{8 9}
+  )
+
 (fact "an unsolved cell will have the numbers in solved cells in the same column removed"
   (def board (create-board [1 0 0 0 0 0 0 0 0
                             2 0 0 0 0 0 0 0 0
@@ -101,6 +133,30 @@
   ;should both be a set of 8 and 9
   (get-cell-numbers 8 1 (remove-solved-numbers-from-unit (get-column-number 1 board))) => #{8 9}
   (get-cell-numbers 9 1 (remove-solved-numbers-from-unit (get-column-number 1 board))) => #{8 9}
+  )
+
+(fact "only the first solvable cell will be solved for regions"
+  (def board (create-board [1 4 7 2 0 8 3 6 9
+                            2 5 8 3 6 9 1 4 7
+                            3 6 0 1 4 7 2 5 8
+                            4 7 1 0 0 0 0 0 0
+                            5 8 2 0 0 0 0 0 0
+                            6 9 3 0 0 0 0 0 0
+                            7 1 4 0 0 0 0 0 0
+                            0 2 5 0 0 0 0 0 0
+                            9 3 6 0 0 0 0 0 0]))
+  (def solved-board (into {} (:board (remove-solved-numbers-from-board-by-unit get-regions board))))
+  (count solved-board) => 81
+  (count (get-region-number 1 solved-board)) => 9
+  (count (get-region-number 2 solved-board)) => 9
+  (count (get-region-number 3 solved-board)) => 9
+  (count-unsolved-cells (get-region-number 1 solved-board)) => 0
+  (count-unsolved-cells (get-region-number 2 solved-board)) => 1
+  (count-unsolved-cells (get-region-number 3 solved-board)) => 0
+  (count-unsolved-cells (get-region-number 5 solved-board)) => 9
+  (count-unsolved-cells (get-region-number 7 solved-board)) => 1
+  (get-cell-numbers 3 3 solved-board) => #{9}
+  (get-cell-numbers 8 1 solved-board) => #{1 2 3 4 5 6 7 8 9}
   )
 
 (fact "only the first solvable cell will be solved for columns"
@@ -141,22 +197,38 @@
   (get-cell-numbers 2 9 solved-board) => #{9}
   )
 
-(fact "only the first solvable cell will be solved for rows and columns"
+(fact "only the first solvable cell will be solved for rows and columns and regions"
   (def board (create-board [1 2 3 4 5 6 7 8 0
-                            9 0 0 0 0 0 0 0 0
-                            8 0 0 0 0 0 0 0 0
+                            9 4 5 0 0 0 0 0 0
+                            8 7 0 0 0 0 0 0 0
                             7 0 0 0 0 0 0 0 0
                             6 0 0 0 0 0 0 0 0
                             5 0 0 0 0 0 0 0 0
                             4 0 0 0 0 0 0 0 0
                             3 0 0 0 0 0 0 0 0
                             0 0 0 0 0 0 0 0 0]))
-  (count-unsolved-cells board) => 66
+  (count-unsolved-cells board) => 63
   (def solved-board (into {} (:board (remove-solved-numbers board))))
   (count solved-board) => 81
   (count (get-column-number 1 solved-board)) => 9
   (count (get-column-number 2 solved-board)) => 9
   (count (get-row-number 1 solved-board)) => 9
   (count (get-row-number 2 solved-board)) => 9
-  (count-unsolved-cells solved-board) => 65;should only solve one, not bothered which
+  (count-unsolved-cells solved-board) => 62;should only solve one, not bothered which
   )
+
+(fact "the solvers should keep on running until they can't remove any more possible numbers from the unsolved cells"
+  (def board (create-board [1 2 3 4 5 6 7 0 0
+                            9 4 5 0 0 0 0 0 0
+                            8 0 0 0 0 0 0 0 0
+                            7 0 0 0 0 0 0 0 0
+                            6 0 0 0 0 0 0 0 0
+                            5 0 0 0 0 0 0 0 0
+                            4 0 0 0 0 0 1 2 3
+                            0 0 0 0 0 0 4 5 6
+                            0 0 0 0 0 0 9 0 0]))
+  (count-unsolved-cells board) => 59
+  (def solved-board (into {} (:board (remove-solved-numbers board))))
+  (count solved-board) => 81
+  (count-unsolved-cells solved-board) => 57
+)
