@@ -1,13 +1,12 @@
-# sudoku-clj
+# Sudoku
 
-FIXME: write description
+Sudoku solver written in Clojure.
 
-## Usage
-
-FIXME: write
+Solves a sudoku puzzle one square at a time and reports back on how it solved each square.  Also provides a report
+for each unsolved cell noting all possible remaining numbers and how it deduced which numbers to remove.
 
 ## License
 
-Copyright (C) 2012 FIXME
+Copyright (C) 2012 Ian Esling
 
 Distributed under the Eclipse Public License, the same as Clojure.
