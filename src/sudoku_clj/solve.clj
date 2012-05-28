@@ -28,9 +28,8 @@
     unit unit))
 
 (defn remove-solved-numbers-from-board-by-unit
-  ([f board]
-  (println "solving board: " + board)
-    (loop [rows (f board)
+  ([f-get-unit board]
+    (loop [rows (f-get-unit board)
            newboard {}
            solved false]
       (if-let [row (first rows)]
@@ -40,9 +39,16 @@
                 solved-after (count (numbers-of-solved-cells row-after-solving))]
             (recur (next rows) (conj newboard row-after-solving) (< solved-before solved-after)))
           (recur (next rows) (conj newboard row) true))
-        newboard))))
+        (assoc {:solved solved} :board newboard)))))
 
-(defn remove-solved-numbers [board]
-  ((comp (partial remove-solved-numbers-from-board-by-unit get-columns)
-     (partial remove-solved-numbers-from-board-by-unit get-rows))
-    board))
+(defn solver-function
+  [f]
+  (fn [board-map]
+    (if-let [solved (:solved board-map)]
+      board-map
+      (remove-solved-numbers-from-board-by-unit f (:board board-map)))))
+
+(defn remove-solved-numbers
+  [board]
+  ((comp (solver-function get-columns) (solver-function get-rows))
+    (assoc {:solved false} :board board)))
