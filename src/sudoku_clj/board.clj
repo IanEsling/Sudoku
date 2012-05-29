@@ -1,9 +1,5 @@
 (ns sudoku-clj.board)
 
-(defn count-unsolved-cells
-  [cells]
-  (reduce #(+ %1 (if (< 1 (count (val %2))) 1 0)) 0 cells))
-
 (defn get-rows
   [board]
   (for [row (group-by #(first (key %)) board)] (into {} (val row))))

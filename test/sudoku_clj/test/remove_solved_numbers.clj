@@ -1,8 +1,14 @@
 (ns sudoku-clj.test.remove-solved-numbers
   (:use midje.sweet)
-  (:use [sudoku-clj.solve :exclude (solved-board)])
+  (:use sudoku-clj.solve)
   (:use sudoku-clj.board)
+  (:use sudoku-clj.solvers.remove-solved-numbers-solver)
+  (:use [sudoku-clj.solvers.run :exclude (solved-board)])
   )
+
+(defn count-unsolved-cells
+  [cells]
+  (reduce #(+ %1 (if (< 1 (count (val %2))) 1 0)) 0 cells))
 
 (defn get-cell-numbers [row column cells]
   (second (first (filter #(and (= row (first (first %))) (= column (second (first %)))) cells))))
