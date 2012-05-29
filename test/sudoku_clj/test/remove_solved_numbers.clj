@@ -230,5 +230,5 @@
   (count-unsolved-cells board) => 59
   (def solved-board (into {} (:board (remove-solved-numbers board))))
   (count solved-board) => 81
-  (count-unsolved-cells solved-board) => 57
+  (count-unsolved-cells solved-board) => 59
 )

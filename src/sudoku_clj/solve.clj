@@ -84,7 +84,7 @@
   [board]
   (loop [count-unsolved-before (reduce #(+ %1 (count %2)) 0 (numbers-of-unsolved-cells board))
          board-to-solve board]
-    (def newboard (remove-solved-numbers board-to-solve))
+    (def newboard (:board (remove-solved-numbers board-to-solve)))
     (if-not (= count-unsolved-before (reduce #(+ %1 (count %2)) 0 (numbers-of-unsolved-cells newboard)))
       (recur (reduce #(+ %1 (count %2)) 0 (numbers-of-unsolved-cells newboard)) newboard)
-    newboard)))
+      newboard)))
