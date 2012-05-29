@@ -1,9 +1,11 @@
 (ns sudoku-clj.test.remove-solved-numbers
   (:use midje.sweet)
-  (:use sudoku-clj.solve)
-  (:use sudoku-clj.test.solve)
+  (:use [sudoku-clj.solve :exclude (newboard)])
   (:use sudoku-clj.board)
   )
+
+(defn get-cell-numbers [row column cells]
+  (second (first (filter #(and (= row (first (first %))) (= column (second (first %)))) cells))))
 
 (defn get-row-number [x board]
   (into {} (filter #(= x (first (key %))) board)))
