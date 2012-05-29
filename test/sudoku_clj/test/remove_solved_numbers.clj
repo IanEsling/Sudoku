@@ -1,7 +1,7 @@
 (ns sudoku-clj.test.remove-solved-numbers
   (:use midje.sweet)
-  (:use [sudoku-clj.solve :exclude (newboard)])
-  (:use sudoku-clj.board)
+  (:use [sudoku-clj.solve :exclude (solved-board)])
+  (:use [sudoku-clj.board :exclude (newboard)])
   )
 
 (defn get-cell-numbers [row column cells]

@@ -1,6 +1,6 @@
 (ns sudoku-clj.solve
   (:use clojure.set)
-  (:use [sudoku-clj.board :exclude (newboard)]))
+  (:use sudoku-clj.board))
 
 (defn numbers-of-solved-cells
   [cells]
@@ -50,7 +50,7 @@
   [board]
   (loop [count-unsolved-before (reduce #(+ %1 (count %2)) 0 (numbers-of-unsolved-cells board))
          board-to-solve board]
-    (def newboard (:board (remove-solved-numbers board-to-solve)))
-    (if-not (= count-unsolved-before (reduce #(+ %1 (count %2)) 0 (numbers-of-unsolved-cells newboard)))
-      (recur (reduce #(+ %1 (count %2)) 0 (numbers-of-unsolved-cells newboard)) newboard)
-      newboard)))
+    (def solved-board (:board (remove-solved-numbers board-to-solve)))
+    (if-not (= count-unsolved-before (reduce #(+ %1 (count %2)) 0 (numbers-of-unsolved-cells solved-board)))
+      (recur (reduce #(+ %1 (count %2)) 0 (numbers-of-unsolved-cells solved-board)) solved-board)
+      solved-board)))

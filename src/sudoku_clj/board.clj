@@ -16,9 +16,9 @@
   [f-x-range f-y-range board]
   (fn
     [newboardseq]
-    (def newboard {})
+    (def regions-board {})
     (conj newboardseq (into {} (for [x (f-x-range) y (f-y-range)]
-                                 (assoc newboard [x y] (get board [x y])))))))
+                                 (assoc regions-board [x y] (get board [x y])))))))
 
 (defn get-regions
   [board]
