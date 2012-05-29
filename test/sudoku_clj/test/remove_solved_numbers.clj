@@ -228,7 +228,7 @@
                             0 0 0 0 0 0 4 5 6
                             0 0 0 0 0 0 9 0 0]))
   (count-unsolved-cells board) => 59
-  (def solved-board (into {} (:board (remove-solved-numbers board))))
+  (def solved-board (run-solvers board))
   (count solved-board) => 81
   (count-unsolved-cells solved-board) => 59
 )
