@@ -16,16 +16,16 @@
 
 (defn remove-solved-numbers-from-board-by-unit
   ([f-get-unit board]
-    (loop [rows (f-get-unit board)
+    (loop [units (f-get-unit board)
            newboard {}
            solved false]
-      (if-let [row (first rows)]
+      (if-let [unit (first units)]
         (if-not solved
-          (let [solved-before (count (numbers-of-solved-cells row))
-                row-after-solving (remove-solved-numbers-from-unit row)
-                solved-after (count (numbers-of-solved-cells row-after-solving))]
-            (recur (next rows) (conj newboard row-after-solving) (< solved-before solved-after)))
-          (recur (next rows) (conj newboard row) true))
+          (let [solved-before (count (numbers-of-solved-cells unit))
+                unit-after-solving (remove-solved-numbers-from-unit unit)
+                solved-after (count (numbers-of-solved-cells unit-after-solving))]
+            (recur (next units) (conj newboard unit-after-solving) (< solved-before solved-after)))
+          (recur (next units) (conj newboard unit) true))
         (assoc {:solved solved} :board newboard)))))
 
 (defn solver-function

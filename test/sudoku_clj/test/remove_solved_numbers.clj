@@ -2,25 +2,10 @@
   (:use midje.sweet)
   (:use sudoku-clj.solve)
   (:use sudoku-clj.board)
+  (:use sudoku-clj.test.solve)
   (:use sudoku-clj.solvers.remove-solved-numbers-solver)
   (:use [sudoku-clj.solvers.run :exclude (solved-board)])
   )
-
-(defn count-unsolved-cells
-  [cells]
-  (reduce #(+ %1 (if (< 1 (count (val %2))) 1 0)) 0 cells))
-
-(defn get-cell-numbers [row column cells]
-  (second (first (filter #(and (= row (first (first %))) (= column (second (first %)))) cells))))
-
-(defn get-row-number [x board]
-  (into {} (filter #(= x (first (key %))) board)))
-
-(defn get-column-number [x board]
-  (into {} (filter #(= x (second (key %))) board)))
-
-(defn get-region-number [x board]
-  (nth (get-regions board) (- x 1)))
 
 (fact "a row is solved if all cells only have one possible number"
   (count-unsolved-cells (get-row-number 1 (create-board [1 2 3 4 5 6 7 8 9]))) => 0
