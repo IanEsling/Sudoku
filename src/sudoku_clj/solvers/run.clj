@@ -9,29 +9,29 @@
   (reduce #(+ %1 (count %2)) 0 (numbers-of-unsolved-cells board)))
 
 (defn solve-unit
-  [f-unit-solver f-get-unit board]
-  (loop [units (f-get-unit board)
+  [unit-solver-f get-units-f board]
+  (loop [units (get-units-f board)
          newboard {}
          solved false]
     (if-let [unit (first units)]
       (if-not solved
         (let [solved-before (count (numbers-of-solved-cells unit))
-              unit-after-solving (f-unit-solver unit)
+              unit-after-solving (unit-solver-f unit)
               solved-after (count (numbers-of-solved-cells unit-after-solving))]
           (recur (next units) (conj newboard unit-after-solving) (< solved-before solved-after)))
         (recur (next units) (conj newboard unit) true))
       (assoc {:solved solved} :board newboard))))
 
 (defn solver-function
-  [solver-f get-unit-f]
+  [solver-f get-units-f]
   (fn [board-map]
     (if-let [solved (:solved board-map)]
       board-map
-      (solve-unit solver-f get-unit-f (:board board-map)))))
+      (solve-unit solver-f get-units-f (:board board-map)))))
 
 (defn run-solvers
-  [board & solver-fs]
-  (loop [fs solver-fs
+  [board & unit-solver-fs]
+  (loop [fs unit-solver-fs
          board-to-solve (assoc {:solved false} :board board)]
     (if-let [f (first fs)]
       (recur (rest fs)
