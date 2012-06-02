@@ -2,6 +2,7 @@
   (:use midje.sweet)
   (:use sudoku-clj.board)
   (:use sudoku-clj.test.solve)
+  (:use sudoku-clj.solvers.run)
   (:use sudoku-clj.solvers.only-possible-number-solver)
   )
 
@@ -56,23 +57,23 @@ cell must be that number"
                                                    9 8 0 6 5 4 3 0 0
                                                    ]) partially-solved))
 
-  (def solved-board (into {} (:board (solve-only-possible-numbers-by-unit get-rows board))))
-  (count solved-board) => 81
-  (count (get-row-number 1 solved-board)) => 9
-  (count (get-row-number 2 solved-board)) => 9
-  (count (get-row-number 3 solved-board)) => 9
-  (count-unsolved-cells (get-row-number 1 solved-board)) => 3
-  (count-unsolved-cells (get-row-number 2 solved-board)) => 2
-  (count-unsolved-cells (get-row-number 3 solved-board)) => 3
-  (get-cell-numbers 1 7 solved-board) => #{7 8 9}
-  (get-cell-numbers 1 8 solved-board) => #{7 8}
-  (get-cell-numbers 1 9 solved-board) => #{7 8 9}
-  (get-cell-numbers 2 1 solved-board) => #{1 4}
-  (get-cell-numbers 2 6 solved-board) => #{8}
-  (get-cell-numbers 2 9 solved-board) => #{1 4}
-  (get-cell-numbers 3 3 solved-board) => #{1 2 7}
-  (get-cell-numbers 3 8 solved-board) => #{1 2}
-  (get-cell-numbers 3 9 solved-board) => #{1 2}
+  (def board-after-solving (into {} (:board ((partial solve-unit only-possible-number-in-unit) get-rows board))))
+  (count board-after-solving) => 81
+  (count (get-row-number 1 board-after-solving)) => 9
+  (count (get-row-number 2 board-after-solving)) => 9
+  (count (get-row-number 3 board-after-solving)) => 9
+  (count-unsolved-cells (get-row-number 1 board-after-solving)) => 3
+  (count-unsolved-cells (get-row-number 2 board-after-solving)) => 2
+  (count-unsolved-cells (get-row-number 3 board-after-solving)) => 3
+  (get-cell-numbers 1 7 board-after-solving) => #{7 8 9}
+  (get-cell-numbers 1 8 board-after-solving) => #{7 8}
+  (get-cell-numbers 1 9 board-after-solving) => #{7 8 9}
+  (get-cell-numbers 2 1 board-after-solving) => #{1 4}
+  (get-cell-numbers 2 6 board-after-solving) => #{8}
+  (get-cell-numbers 2 9 board-after-solving) => #{1 4}
+  (get-cell-numbers 3 3 board-after-solving) => #{1 2 7}
+  (get-cell-numbers 3 8 board-after-solving) => #{1 2}
+  (get-cell-numbers 3 9 board-after-solving) => #{1 2}
   )
 
 (fact "only the first solvable cell will be solved for columns"
@@ -90,23 +91,23 @@ cell must be that number"
                                                    0 9 1 0 5 4 3 0 0
                                                    ]) partially-solved))
 
-  (def solved-board (into {} (:board (solve-only-possible-numbers-by-unit get-columns board))))
-  (count solved-board) => 81
-  (count (get-column-number 1 solved-board)) => 9
-  (count (get-column-number 2 solved-board)) => 9
-  (count (get-column-number 4 solved-board)) => 9
-  (count-unsolved-cells (get-column-number 1 solved-board)) => 3
-  (count-unsolved-cells (get-column-number 2 solved-board)) => 2
-  (count-unsolved-cells (get-column-number 4 solved-board)) => 3
-  (get-cell-numbers 7 1 solved-board) => #{7 8 9}
-  (get-cell-numbers 8 1 solved-board) => #{7 8}
-  (get-cell-numbers 9 1 solved-board) => #{7 8 9}
-  (get-cell-numbers 1 2 solved-board) => #{1 4}
-  (get-cell-numbers 5 2 solved-board) => #{8}
-  (get-cell-numbers 8 2 solved-board) => #{1 4}
-  (get-cell-numbers 4 4 solved-board) => #{1 2 7}
-  (get-cell-numbers 5 4 solved-board) => #{1 2}
-  (get-cell-numbers 9 4 solved-board) => #{1 2}
+  (def board-after-solving (into {} (:board ((partial solve-unit only-possible-number-in-unit) get-columns board))))
+  (count board-after-solving) => 81
+  (count (get-column-number 1 board-after-solving)) => 9
+  (count (get-column-number 2 board-after-solving)) => 9
+  (count (get-column-number 4 board-after-solving)) => 9
+  (count-unsolved-cells (get-column-number 1 board-after-solving)) => 3
+  (count-unsolved-cells (get-column-number 2 board-after-solving)) => 2
+  (count-unsolved-cells (get-column-number 4 board-after-solving)) => 3
+  (get-cell-numbers 7 1 board-after-solving) => #{7 8 9}
+  (get-cell-numbers 8 1 board-after-solving) => #{7 8}
+  (get-cell-numbers 9 1 board-after-solving) => #{7 8 9}
+  (get-cell-numbers 1 2 board-after-solving) => #{1 4}
+  (get-cell-numbers 5 2 board-after-solving) => #{8}
+  (get-cell-numbers 8 2 board-after-solving) => #{1 4}
+  (get-cell-numbers 4 4 board-after-solving) => #{1 2 7}
+  (get-cell-numbers 5 4 board-after-solving) => #{1 2}
+  (get-cell-numbers 9 4 board-after-solving) => #{1 2}
   )
 
 (fact "only the first solvable cell will be solved for regions"
@@ -124,23 +125,23 @@ cell must be that number"
                                                    0 9 1 0 5 4 3 0 0
                                                    ]) partially-solved))
 
-  (def solved-board (into {} (:board (solve-only-possible-numbers-by-unit get-regions board))))
-  (count solved-board) => 81
-  (count (get-region-number 2 solved-board)) => 9
-  (count (get-region-number 4 solved-board)) => 9
-  (count (get-region-number 8 solved-board)) => 9
-  (count-unsolved-cells (get-region-number 2 solved-board)) => 3
-  (count-unsolved-cells (get-region-number 4 solved-board)) => 2
-  (count-unsolved-cells (get-region-number 8 solved-board)) => 3
-  (get-cell-numbers 1 5 solved-board) => #{7 8 9}
-  (get-cell-numbers 2 6 solved-board) => #{7 8}
-  (get-cell-numbers 3 4 solved-board) => #{7 8 9}
-  (get-cell-numbers 4 3 solved-board) => #{1 4}
-  (get-cell-numbers 5 2 solved-board) => #{8}
-  (get-cell-numbers 6 1 solved-board) => #{1 4}
-  (get-cell-numbers 7 5 solved-board) => #{1 2 7}
-  (get-cell-numbers 7 6 solved-board) => #{1 2}
-  (get-cell-numbers 9 4 solved-board) => #{1 2}
+  (def board-after-solving (into {} (:board ((partial solve-unit only-possible-number-in-unit) get-regions board))))
+  (count board-after-solving) => 81
+  (count (get-region-number 2 board-after-solving)) => 9
+  (count (get-region-number 4 board-after-solving)) => 9
+  (count (get-region-number 8 board-after-solving)) => 9
+  (count-unsolved-cells (get-region-number 2 board-after-solving)) => 3
+  (count-unsolved-cells (get-region-number 4 board-after-solving)) => 2
+  (count-unsolved-cells (get-region-number 8 board-after-solving)) => 3
+  (get-cell-numbers 1 5 board-after-solving) => #{7 8 9}
+  (get-cell-numbers 2 6 board-after-solving) => #{7 8}
+  (get-cell-numbers 3 4 board-after-solving) => #{7 8 9}
+  (get-cell-numbers 4 3 board-after-solving) => #{1 4}
+  (get-cell-numbers 5 2 board-after-solving) => #{8}
+  (get-cell-numbers 6 1 board-after-solving) => #{1 4}
+  (get-cell-numbers 7 5 board-after-solving) => #{1 2 7}
+  (get-cell-numbers 7 6 board-after-solving) => #{1 2}
+  (get-cell-numbers 9 4 board-after-solving) => #{1 2}
   )
 
 (fact "only the first solvable cell will be solved for rows and columns and regions"
@@ -158,11 +159,11 @@ cell must be that number"
                                                    0 9 1 0 5 4 3 0 0
                                                    ]) partially-solved))
   (count-unsolved-cells board) => 34
-  (def solved-board (into {} (:board (solve-only-possible-numbers board))))
-  (count solved-board) => 81
-  (count (get-column-number 1 solved-board)) => 9
-  (count (get-column-number 2 solved-board)) => 9
-  (count (get-row-number 1 solved-board)) => 9
-  (count (get-row-number 2 solved-board)) => 9
-  (count-unsolved-cells solved-board) => 33;should only solve one, not bothered which
+  (def board-after-solving (into {} (:board (run-solvers board only-possible-number-in-unit))))
+  (count board-after-solving) => 81
+  (count (get-column-number 1 board-after-solving)) => 9
+  (count (get-column-number 2 board-after-solving)) => 9
+  (count (get-row-number 1 board-after-solving)) => 9
+  (count (get-row-number 2 board-after-solving)) => 9
+  (count-unsolved-cells board-after-solving) => 33;should only solve one, not bothered which
   )

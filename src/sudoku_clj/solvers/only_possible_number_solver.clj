@@ -25,29 +25,3 @@
               (into newunit {(first cell) (set (intersection (val cell) (set (keys freq))))})
               (into newunit {(first cell) (second cell)}))
             ) {} unit))
-
-(defn solve-only-possible-numbers-by-unit
-  ([f-get-unit board]
-    (loop [units (f-get-unit board)
-           newboard {}
-           solved false]
-      (if-let [unit (first units)]
-        (if-not solved
-          (let [solved-before (count (numbers-of-solved-cells unit))
-                unit-after-solving (only-possible-number-in-unit unit)
-                solved-after (count (numbers-of-solved-cells unit-after-solving))]
-            (recur (next units) (conj newboard unit-after-solving) (< solved-before solved-after)))
-          (recur (next units) (conj newboard unit) true))
-        (assoc {:solved solved} :board newboard)))))
-
-(defn solver-function
-  [f]
-  (fn [board-map]
-    (if-let [solved (:solved board-map)]
-      board-map
-      (solve-only-possible-numbers-by-unit f (:board board-map)))))
-
-(defn solve-only-possible-numbers
-  [board]
-  ((comp (solver-function get-regions) (solver-function get-columns) (solver-function get-rows))
-    (assoc {:solved false} :board board)))
