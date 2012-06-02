@@ -1,4 +1,4 @@
-(ns sudoku_clj.test.run
+(ns sudoku_clj.test.solvers.run
   (:use midje.sweet)
   (:use sudoku-clj.solve)
   (:use sudoku-clj.test.solve)

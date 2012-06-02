@@ -1,4 +1,4 @@
-(ns sudoku-clj.test.remove-solved-numbers
+(ns sudoku-clj.test.solvers.remove-solved-numbers
   (:use midje.sweet)
   (:use sudoku-clj.solve)
   (:use sudoku-clj.board)

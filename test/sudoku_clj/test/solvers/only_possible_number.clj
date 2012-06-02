@@ -1,4 +1,4 @@
-(ns sudoku-clj.test.only-possible-number
+(ns sudoku-clj.test.solvers.only-possible-number
   (:use midje.sweet)
   (:use sudoku-clj.board)
   (:use sudoku-clj.test.solve)
