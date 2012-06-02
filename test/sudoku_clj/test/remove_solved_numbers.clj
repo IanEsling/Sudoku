@@ -137,7 +137,7 @@
                             3 0 0 0 0 0 0 0 0
                             0 0 0 0 0 0 0 0 0]))
   (count-unsolved-cells board) => 63
-  (def solved-board (into {} (:board (remove-solved-numbers board))))
+  (def solved-board (into {} (:board (remove-solved-numbers board remove-solved-numbers-from-board-by-unit ))))
   (count solved-board) => 81
   (count (get-column-number 1 solved-board)) => 9
   (count (get-column-number 2 solved-board)) => 9
