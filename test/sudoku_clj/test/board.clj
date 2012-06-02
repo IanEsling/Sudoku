@@ -3,7 +3,8 @@
   (:use sudoku-clj.board)
   )
 
-(defn random-board []
+(defn random-board
+  []
   (create-board (repeatedly 81 (partial rand-int 10))))
 
 (fact "a board can be converted into 9 rows"

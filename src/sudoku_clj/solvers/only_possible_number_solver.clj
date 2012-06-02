@@ -24,19 +24,8 @@
             (if (= 1 (count (intersection (val cell) (set (keys freq)))))
               (into newunit {(first cell) (set (intersection (val cell) (set (keys freq))))})
               (into newunit {(first cell) (second cell)}))
-            ) {} unit)
-;  (for [cell unit]
-;    (if (< 0 (count (intersection (val cell) (set (keys freq)))))
-;      cell
-;      )
-;    )
-  ;  (for [numbers (numbers-of-unsolved-cells unit)
-  ;        number numbers]
-  ;    (assoc freq number (+ 1 (get freq number)))
-  ;    )
-  )
+            ) {} unit))
 
 (defn only-possible-number-solver
   [board]
-
   board)

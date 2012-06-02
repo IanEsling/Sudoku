@@ -31,17 +31,20 @@
      )
     (seq {})))
 
-(defn create-cell-numbers [x]
+(defn create-cell-numbers
+  [x]
   (if (re-matches (re-pattern "[1-9]") (str x))
     (hash-set x)
     (set (range 1 10))))
 
-(defn board-cells []
+(defn board-cells
+  []
   (for [row (range 1 10)
         column (range 1 10)]
     [row column]))
 
-(defn create-board [starting-numbers]
+(defn create-board
+  [starting-numbers]
   (loop [cell-numbers (map create-cell-numbers starting-numbers)
          cells (board-cells)
          board{}]
