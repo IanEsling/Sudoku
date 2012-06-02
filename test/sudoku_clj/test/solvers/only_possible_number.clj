@@ -6,10 +6,6 @@
   (:use sudoku-clj.solvers.only-possible-number-solver)
   )
 
-(defn update-cells-in-board
-  [board cells]
-  (reduce #(assoc %1 (key %2) (val %2)) board cells))
-
 (fact "if an unsolved cell is the only one in a row that could be a particular number then that
 cell must be that number"
   (def partially-solved {[1 8] #{7 8 9} [1 9] #{7 9}})

@@ -22,6 +22,10 @@
   [x board]
   (nth (get-regions board) (- x 1)))
 
+(defn update-cells-in-board
+  [board cells]
+  (reduce #(assoc %1 (key %2) (val %2)) board cells))
+
 (fact "a row is solved if all cells only have one possible number"
   (count-unsolved-cells (get-row-number 1 (create-board [1 2 3 4 5 6 7 8 9]))) => 0
   (count-unsolved-cells (get-row-number 1 (create-board [1 2 3 4 5 6 7 8 0]))) => 1
