@@ -11,6 +11,6 @@
     (if-let [pair (first pairs)]
       (recur (next pairs)
         (reduce
-          #(into %1 {(key %2) (if-not (= (val %2) pair) (difference (val %2) pair) (val %2))}) {} new-unit))
-      new-unit)
-    ))
+          #(into %1 {(key %2) (if-not (= (val %2) pair) (difference (val %2) pair) (val %2))})
+          {} new-unit))
+      new-unit)))

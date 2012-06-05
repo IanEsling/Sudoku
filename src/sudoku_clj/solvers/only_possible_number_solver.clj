@@ -4,11 +4,11 @@
   (:use clojure.set)
   )
 
-(defn map-of-unsolved-numbers
+(defn- map-of-unsolved-numbers
   [unit]
   (reduce #(into %1 {%2 0}) {} (apply union (numbers-of-unsolved-cells unit))))
 
-(defn frequencies-of-unsolved-numbers
+(defn- frequencies-of-unsolved-numbers
   [unit]
   (reduce #(reduce (fn [t x] (assoc t x (+ 1 (get t x)))) %1 %2)
     (map-of-unsolved-numbers unit)

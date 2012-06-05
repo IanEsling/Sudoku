@@ -6,10 +6,6 @@
   [row column cells]
   (second (first (filter #(and (= row (first (first %))) (= column (second (first %)))) cells))))
 
-(defn count-unsolved-cells
-  [cells]
-  (reduce #(+ %1 (if (< 1 (count (val %2))) 1 0)) 0 cells))
-
 (defn get-row-number
   [x board]
   (into {} (filter #(= x (first (key %))) board)))

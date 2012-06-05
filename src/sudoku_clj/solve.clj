@@ -2,7 +2,7 @@
   (:use clojure.set)
   (:use sudoku-clj.board))
 
-(defn numbers-for-cells
+(defn- numbers-for-cells
   [f cells]
   (remove f (for [cell cells] (val cell))))
 
@@ -13,3 +13,7 @@
 (defn numbers-of-unsolved-cells
   [cells]
   (numbers-for-cells #(= 1 (count %)) cells))
+
+(defn cells-containing-numbers
+  [numbers unit]
+  (filter #(subset? numbers (val %)) unit))

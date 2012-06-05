@@ -47,3 +47,23 @@
   (get-cell-numbers 8 1 (remove-naked-pairs-in-unit (get-column-number 1 board))) => #{1 2}
   (get-cell-numbers 9 1 (remove-naked-pairs-in-unit (get-column-number 1 board))) => #{3}
   )
+
+(fact "removing naked pairs from cells will stop when the first cell has been solved"
+  (def partially-solved {[3 4] #{7 8} [3 5] #{7 8 9} [3 6] #{7 8}
+                         [4 7] #{1 2} [4 8] #{1 2} [4 9] #{1 2 3}
+                         [7 3] #{5 7 8} [8 3] #{5 7} [9 3] #{5 7}})
+  (def board (update-cells-in-board (create-board [0 0 9 1 2 3 0 0 0
+                                                   8 0 1 4 5 6 0 0 0
+                                                   0 0 2 0 0 0 0 0 0
+                                                   4 5 6 7 8 9 0 0 0
+                                                   5 0 3 0 0 0 0 0 0
+                                                   4 0 4 0 0 0 0 0 0
+                                                   0 0 0 0 0 0 0 0 0
+                                                   0 0 0 0 0 0 0 0 0
+                                                   0 0 0 0 0 0 0 0 0
+                                                   ]) partially-solved))
+  (count-unsolved-cells board) => 61
+  (def board-after-solving (into {} (:board (run-solvers board remove-naked-pairs-in-unit))))
+  (count board-after-solving) => 81
+  (count-unsolved-cells board-after-solving) => 60;should only solve one, not bothered which)
+  )
