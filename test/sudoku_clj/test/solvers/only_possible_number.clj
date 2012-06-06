@@ -53,7 +53,7 @@ cell must be that number"
                                                    9 8 0 6 5 4 3 0 0
                                                    ]) partially-solved))
 
-  (def board-after-solving (into {} (:board ((partial solve-unit only-possible-number-in-unit) get-rows board))))
+  (def board-after-solving (into {} (:board ((partial solve-units only-possible-number-in-unit) get-rows board))))
   (count board-after-solving) => 81
   (count (get-row-number 1 board-after-solving)) => 9
   (count (get-row-number 2 board-after-solving)) => 9
@@ -87,7 +87,7 @@ cell must be that number"
                                                    0 9 1 0 5 4 3 0 0
                                                    ]) partially-solved))
 
-  (def board-after-solving (into {} (:board ((partial solve-unit only-possible-number-in-unit) get-columns board))))
+  (def board-after-solving (into {} (:board ((partial solve-units only-possible-number-in-unit) get-columns board))))
   (count board-after-solving) => 81
   (count (get-column-number 1 board-after-solving)) => 9
   (count (get-column-number 2 board-after-solving)) => 9
@@ -121,7 +121,7 @@ cell must be that number"
                                                    0 9 1 0 5 4 3 0 0
                                                    ]) partially-solved))
 
-  (def board-after-solving (into {} (:board ((partial solve-unit only-possible-number-in-unit) get-regions board))))
+  (def board-after-solving (into {} (:board ((partial solve-units only-possible-number-in-unit) get-regions board))))
   (count board-after-solving) => 81
   (count (get-region-number 2 board-after-solving)) => 9
   (count (get-region-number 4 board-after-solving)) => 9

@@ -8,13 +8,6 @@
   [board]
   (reduce #(+ %1 (count %2)) 0 (numbers-of-unsolved-cells board)))
 
-(defn- solver-function
-  [solver-f get-units-f]
-  (fn [board-map]
-    (if-let [solved (:solved board-map)]
-      board-map
-      (solve-units solver-f get-units-f (:board board-map)))))
-
 (defn solve-units
   [unit-solver-f get-units-f board]
   (loop [units (get-units-f board)
@@ -28,6 +21,13 @@
           (recur (next units) (conj newboard unit-after-solving) (< solved-before solved-after)))
         (recur (next units) (conj newboard unit) true))
       (assoc {:solved solved} :board newboard))))
+
+(defn- solver-function
+  [solver-f get-units-f]
+  (fn [board-map]
+    (if-let [solved (:solved board-map)]
+      board-map
+      (solve-units solver-f get-units-f (:board board-map)))))
 
 (defn run-solvers
   [board & unit-solver-fs]

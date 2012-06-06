@@ -8,7 +8,7 @@
     (conj newboardseq (into {} (for [x (f-x-range) y (f-y-range)]
                                  (assoc regions-board [x y] (get board [x y])))))))
 
-(defn- create-cell-numbers
+(defn create-cell-numbers
   [x]
   (if (re-matches (re-pattern "[1-9]") (str x))
     (hash-set x)
