@@ -57,7 +57,7 @@
                             7 1 4 0 0 0 0 0 0
                             0 2 5 0 0 0 0 0 0
                             9 3 6 0 0 0 0 0 0]))
-  (def solved-board (into {} (:board (solve-unit remove-solved-numbers-from-unit get-regions board))))
+  (def solved-board (into {} (:board (solve-units remove-solved-numbers-from-unit get-regions board))))
   (count solved-board) => 81
   (count (get-region-number 1 solved-board)) => 9
   (count (get-region-number 2 solved-board)) => 9
@@ -81,7 +81,7 @@
                             7 1 4 0 0 0 0 0 0
                             8 2 5 0 0 0 0 0 0
                             9 0 0 0 0 0 0 0 0]))
-  (def solved-board (into {} (:board (solve-unit remove-solved-numbers-from-unit get-columns board))))
+  (def solved-board (into {} (:board (solve-units remove-solved-numbers-from-unit get-columns board))))
   (count solved-board) => 81
   (count (get-column-number 1 solved-board)) => 9
   (count (get-column-number 2 solved-board)) => 9
@@ -97,7 +97,7 @@
   (def board (create-board [1 2 3 4 5 6 7 8 9
                             1 2 3 4 5 6 7 8 0
                             1 2 3 4 5 6 7 8 0]))
-  (def solved-board (into {} (:board (solve-unit remove-solved-numbers-from-unit get-rows board))))
+  (def solved-board (into {} (:board (solve-units remove-solved-numbers-from-unit get-rows board))))
   (count solved-board) => 81
   (count (get-row-number 1 solved-board)) => 9
   (count (get-row-number 2 solved-board)) => 9

@@ -5,6 +5,7 @@
   (:use sudoku-clj.board)
   (:use sudoku-clj.solvers.run)
   (:use sudoku-clj.solvers.remove-solved-numbers-solver)
+  (:use sudoku-clj.solvers.hidden-pairs-solver)
   (:use sudoku-clj.solvers.only-possible-number-solver)
   )
 
@@ -36,7 +37,10 @@
                             0 0 0 0 0 0 4 5 6
                             0 0 0 0 0 0 7 0 0]))
   (count-unsolved-cells board) => 59
-  (def board-after-solving (:board (run-solvers board remove-solved-numbers-from-unit only-possible-number-in-unit)))
+  (def board-after-solving (:board (run-solvers board
+                                     expose-hidden-pairs-in-unit
+                                     remove-solved-numbers-from-unit
+                                     only-possible-number-in-unit)))
   (count board-after-solving) => 81
   (count-unsolved-cells board-after-solving) => 58
   (get-cell-numbers 1 9 board-after-solving) => #{7}

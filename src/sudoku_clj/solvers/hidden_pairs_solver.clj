@@ -15,7 +15,8 @@
 (defn- hidden-pairs-in-unit
   [unit]
   (map #(first %)
-    (filter #(and (= 2 (count (cells-containing-numbers #{(first (key %))} unit)))
+    (filter #(and ;ensure each number only exists in 2 places in this unit
+               (= 2 (count (cells-containing-numbers #{(first (key %))} unit)))
                (= 2 (count (cells-containing-numbers #{(second (key %))} unit))))
       (filter #(= 2 (val %)) ;all pairs only contained by 2 cells
         (reduce #(assoc %1 %2 (count (cells-containing-numbers %2 unit)))
