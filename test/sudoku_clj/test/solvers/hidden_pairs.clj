@@ -71,3 +71,27 @@ as well as being reduced to just the hidden pair"
   (get-cell-numbers 6 5 board-after-solving) => #{4 5 7}
   (get-cell-numbers 6 6 board-after-solving) => #{6 9}
   )
+
+(fact "more than one hidden pair will be exposed"
+  (def partially-solved {[5 4] #{6 7 8} [5 5] #{5 6 7 8} [5 6] #{5 8} [6 4] #{4 5 9} [6 5] #{4 5 8 9} [6 6] #{5 8}})
+  (def board (update-cells-in-board (create-board [1 0 0 0 9 0 0 0 0
+                                                   2 0 0 0 8 0 0 0 0
+                                                   3 0 0 0 7 0 0 0 0
+                                                   4 0 0 1 2 3 0 0 0
+                                                   5 0 0 0 0 0 0 0 0
+                                                   6 0 0 0 0 0 0 0 0
+                                                   7 0 0 0 0 0 0 0 0
+                                                   8 0 0 0 0 0 0 0 0
+                                                   9 0 0 0 0 0 0 0 0
+                                                   ]) partially-solved))
+  (def board-after-solving (expose-hidden-pairs-in-unit (get-region-number 5 board)))
+  (get-cell-numbers 4 4 board-after-solving) => #{1}
+  (get-cell-numbers 4 5 board-after-solving) => #{2}
+  (get-cell-numbers 4 6 board-after-solving) => #{3}
+  (get-cell-numbers 5 4 board-after-solving) => #{6 7}
+  (get-cell-numbers 5 5 board-after-solving) => #{6 7}
+  (get-cell-numbers 5 6 board-after-solving) => #{5 8}
+  (get-cell-numbers 6 4 board-after-solving) => #{4 9}
+  (get-cell-numbers 6 5 board-after-solving) => #{4 9}
+  (get-cell-numbers 6 6 board-after-solving) => #{5 8}
+  )

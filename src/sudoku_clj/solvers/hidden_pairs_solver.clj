@@ -31,6 +31,6 @@
       (if-let [pair (first pairs)]
         (recur (next pairs)
           (reduce #(assoc %1 (key %2) pair)
-            unit
-            (cells-containing-numbers pair unit)))
+            new-unit
+            (cells-containing-numbers pair new-unit)))
       new-unit))))
