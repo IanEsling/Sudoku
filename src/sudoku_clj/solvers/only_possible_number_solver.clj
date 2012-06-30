@@ -21,5 +21,6 @@
             [newunit cell]
             (if (= 1 (count (intersection (val cell) (set (keys freq)))))
               (into newunit {(first cell) (set (intersection (val cell) (set (keys freq))))})
-              (into newunit {(first cell) (second cell)}))
-            ) {} unit))
+              (into newunit {(first cell) (second cell)})))
+    {}
+    unit))
