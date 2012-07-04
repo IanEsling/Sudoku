@@ -12,7 +12,7 @@ cell in that region"
                                                    0 0 0 0 0 0 0 0 0
                                                    0 0 0 0 0 0 0 0 0
                                                    ]) partially-solved))
-  (def board-after-solving (unique-to-unit-solver (get-row-number 1 board)))
+  (def board-after-solving (unique-to-unit-solver (get-region-number 3 board) (get-rows board)))
   (get-cell-numbers 1 7 board-after-solving) => #{2 5 7 9}
   (get-cell-numbers 1 8 board-after-solving) => #{8}
   (get-cell-numbers 1 9 board-after-solving) => #{2 5 7 9}
