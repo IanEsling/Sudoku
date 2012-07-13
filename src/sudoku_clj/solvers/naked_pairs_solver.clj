@@ -4,8 +4,7 @@
   (:use clojure.set)
   )
 
-(defn remove-naked-pairs-in-unit
-  [unit]
+(defn remove-naked-pairs-in-unit [unit]
   (loop [pairs (keys (filter #(= 2 (count (val %))) (group-by #(val %) unit)))
          new-unit unit]
     (if-let [pair (first pairs)]

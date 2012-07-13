@@ -4,12 +4,10 @@
   (:use sudoku-clj.solvers.remove-solved-numbers-solver)
   (:use sudoku-clj.solvers.only-possible-number-solver))
 
-(defn- count-unsolved-numbers
-  [board]
+(defn- count-unsolved-numbers [board]
   (reduce #(+ %1 (count %2)) 0 (numbers-of-unsolved-cells board)))
 
-(defn solve-units
-  [unit-solver-f get-units-f board]
+(defn solve-units [unit-solver-f get-units-f board]
   (loop [units (get-units-f board)
          newboard {}
          solved false]
@@ -22,15 +20,13 @@
         (recur (next units) (conj newboard unit) true))
       (assoc {:solved solved} :board newboard))))
 
-(defn- solver-function
-  [solver-f get-units-f]
+(defn- solver-function [solver-f get-units-f]
   (fn [board-map]
     (if-let [solved (:solved board-map)]
       board-map
       (solve-units solver-f get-units-f (:board board-map)))))
 
-(defn run-solvers
-  [board & unit-solver-fs]
+(defn run-solvers [board & unit-solver-fs]
   (loop [fs unit-solver-fs
          board-to-solve (assoc {:solved false} :board board)]
     (if-let [f (first fs)]
@@ -43,8 +39,7 @@
         )
       board-to-solve)))
 
-(defn solve-board
-  [board]
+(defn solve-board [board]
   (loop [board-to-solve board]
     (def solved-board (:board (run-solvers board-to-solve remove-solved-numbers-from-unit only-possible-number-in-unit)))
     (if-not (= (count-unsolved-numbers board-to-solve) (count-unsolved-numbers solved-board))
